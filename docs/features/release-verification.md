@@ -235,6 +235,46 @@ after Ruby syntax, style, strict online audit, checksum fetch, and livecheck
 No installed app was replaced, physical dictation performed, or native GUI
 verification added for this release.
 
+## macOS 2.1.23
+
+**Published October 2, 2026:** [2.1.23](../releases/2.1.23.md), release commit
+`cbea1ef`, build `20123`. Before tagging, 492 debug and 491 release Rust tests
+passed, with twelve opt-in tests ignored. Strict all-target/all-feature Clippy,
+formatting, and app identity guards passed. The public SDK passed typecheck, 70
+tests, and build. Linux CI passed on each merged pull request (#111 to #114); no
+Linux binary was published.
+
+macOS 27.0.1's loader rejects procedural-macro dylibs that Rust 1.95 links in
+release mode with an explicit deployment target ("mis-aligned LINKEDIT string
+pool"), so `release-app.sh prepare` failed with the default toolchain. The release
+was built with `RUSTUP_TOOLCHAIN=1.99.0`, which links them correctly, after the
+release test suite also passed on 1.99.0 with `MACOSX_DEPLOYMENT_TARGET=15.0`.
+The app still declares and was built for macOS 15.0 (`minos 15.0`, SDK 27.0).
+
+Apple accepted the app and DMG; stapling and Gatekeeper validation passed. The
+signed candidate was launched in place of the installed app with
+`DisableUpdates` set (Sparkle never loaded and the launch logged the managed
+state) and again with the key removed (Sparkle loaded); the key was deleted
+afterward and the installed 2.1.22 app was restored. The publisher verified
+identical app payloads in the DMG and Sparkle ZIP before upload.
+The DMG SHA-256 is
+`b2e61bb5e1ec7ffd2c6c24867fdd507b95a95f9824fc8a857c1bf67cb6775bc4`;
+the ZIP SHA-256 is
+`2cbca2dc11c32df25746d0f8b2f3e65f53d29054b765a94c6db4b5385c5491d5`.
+The live feed leads with build `20123`; the custom-host, GitHub mirror, and latest
+DMG links return HTTP 200, and both downloaded DMGs match the checksum.
+
+The `.dev` site passed build and Cloudflare deployment. The `.com` site passed
+lint, typecheck, build, and Vercel deployment. Production responses from both
+custom domains and both Vercel aliases contain 2.1.23. These are HTTP/content
+checks, not browser interaction evidence.
+[Homebrew cask PR #23](https://github.com/anomalyco/homebrew-tap/pull/23) merged
+after Ruby syntax, style, and livecheck (`2.1.23 ==> 2.1.23`) passed using a
+temporary verification tap, since removed. The strict online audit now reports a
+token conflict with a homebrew-core formula named `hex`, unrelated to this bump.
+No Bluetooth headset, physical dictation, or update from an older installed
+build was exercised.
+
 ## Linux Service Build
 
 **Observed September 4, 2026, local service build:** 139 Rust tests passed (seven

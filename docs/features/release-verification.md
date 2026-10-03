@@ -235,6 +235,34 @@ after Ruby syntax, style, strict online audit, checksum fetch, and livecheck
 No installed app was replaced, physical dictation performed, or native GUI
 verification added for this release.
 
+## macOS 2.1.24
+
+**Published October 3, 2026:** [2.1.24](../releases/2.1.24.md), release commit
+`c3f5823`, build `20124`, built with the default stable Rust 1.99.0. This release
+ships the dependency updates in #115 to #117 (including transcribe-cpp 0.2.4 and
+Effect 4.0.0) and #119. Before tagging, 492 debug and 491 release Rust tests
+passed; one timing-bound OpenCode discovery test failed once in release under a
+load average near 100 and passed on rerun. Clippy, formatting, app identity
+guards, both SDK packages (70 and 52 tests), and the commands-workspace smoke
+(fresh, beta.97, beta.107, and rc.112 workspaces) passed. Linux CI passed on
+each merged pull request.
+
+The first signed candidate, launched against a real personal-command workspace,
+refused to load commands because the Effect migration did not recognize the
+previously shipped `4.0.0-rc.112` pin. #119 fixed that before publication, and the
+candidate was rebuilt. The rebuilt candidate loaded Parakeet Unified English on
+Metal, migrated the workspace to Effect 4.0.0, and activated personal commands;
+the workspace was then restored for the installed 2.1.23 app, which reactivated
+its commands. The DMG SHA-256 is
+`c017f381c5d966647f3d17cc90bff958415ddb4eb859491261c22ab5caa6d70d`; the ZIP
+SHA-256 is
+`487430aad59d3bc9f1ca8d123ab6b44c07201f2b9a5499dd4e431fb8b0402c3e`. The live
+feed leads with build `20124`, and both downloaded DMGs match the checksum. Both
+sites and all Vercel aliases serve 2.1.24, and
+[Homebrew cask PR #24](https://github.com/anomalyco/homebrew-tap/pull/24) merged
+after syntax, style, and livecheck passed. No physical dictation, Bluetooth
+headset, or Sparkle update from an older installed build was exercised.
+
 ## macOS 2.1.23
 
 **Published October 2, 2026:** [2.1.23](../releases/2.1.23.md), release commit

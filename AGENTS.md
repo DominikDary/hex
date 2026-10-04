@@ -442,7 +442,21 @@ captures that do not require recompilation; `HEX_PREVIEW_BINARY` can override
 the release binary path. Keep release previews authoritative for production
 navigation because debug builds expose developer-only panes.
 
-The supported Linux beta and release host use x86_64 Arch Linux. Install its
+The Linux beta supports x86_64 Ubuntu 24.04 LTS and Arch Linux. Ubuntu 24.04
+build and integration checks run in CI; Arch/i3 remains the physical reference
+host. Install Ubuntu development dependencies with:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y build-essential clang cmake curl git jq pkg-config \
+  python3 xxd libasound2-dev libudev-dev libssl-dev libgtk-3-dev \
+  libgtk-layer-shell-dev libayatana-appindicator3-dev libxkbcommon-x11-dev \
+  libx11-xcb-dev libfontconfig1-dev libfreetype-dev libxcursor-dev libxi-dev \
+  libxrandr-dev libopenblas-dev libvulkan-dev glslc libshaderc-dev \
+  spirv-headers openssl mesa-vulkan-drivers wl-clipboard wtype
+```
+
+Install the stable Rust toolchain with rustup. On Arch, install its
 native build dependencies with:
 
 ```sh
@@ -560,7 +574,8 @@ seam once there are two real adapters or a current test requires substitution.
 `ROADMAP.md` is the authoritative work list. Keep these constraints visible:
 
 - Validate public onboarding from a clean macOS account and signed Linux updates
-  on the supported Arch/i3 host.
+  on the Arch/i3 reference host; validate physical Ubuntu desktop behavior before
+  claiming it as observed there.
 - Validate native Wayland on a real compatible compositor, including physical
   device reconnect, focus/click-through, target paste, and tray-less shutdown.
 - Add a second real browser adapter before generalizing browser context.

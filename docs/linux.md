@@ -1,12 +1,13 @@
 # Install The Linux Beta
 
-The Linux beta targets x86_64 Linux: i3/X11 and compatible wlroots-based Wayland
-compositors such as Hyprland or Sway. Audio uses ALSA, including PipeWire systems
-with ALSA compatibility. Inference uses Vulkan when available and can fall back
-to the CPU. The GPUI Settings window still needs a Vulkan driver, even with CPU
-inference; `vulkan-icd-loader` alone is not a driver. Install a driver for your GPU
-or a software Vulkan driver. See the Wayland requirements below before enabling
-native input.
+Ubuntu 24.04 LTS on x86_64 is supported by the Linux beta's existing Ubuntu CI
+coverage. The desktop contract is deliberately narrower than “all Linux”: use
+i3/X11 or a compatible wlroots-based Wayland compositor such as Hyprland or Sway.
+Audio uses ALSA, including PipeWire systems with ALSA compatibility. Inference
+uses Vulkan when available and can fall back to the CPU. The GPUI Settings window
+still needs a Vulkan driver, even with CPU inference; `vulkan-icd-loader` alone is
+not a driver. Install a driver for your GPU or a software Vulkan driver. See the
+Wayland requirements below before enabling native input.
 
 The beta does not support voice commands, application or browser context, or
 meetings. This is not universal Wayland support: GNOME and KDE are not covered
@@ -91,7 +92,27 @@ sh install-linux.sh uninstall
 
 ## Install From Source
 
-Install the native dependencies and, for a source build, the Rust toolchain:
+### Ubuntu 24.04 LTS
+
+```sh
+sudo apt-get update
+sudo apt-get install -y build-essential clang cmake curl git jq pkg-config \
+  python3 xxd libasound2-dev libudev-dev libssl-dev libgtk-3-dev \
+  libgtk-layer-shell-dev libayatana-appindicator3-dev libxkbcommon-x11-dev \
+  libx11-xcb-dev libfontconfig1-dev libfreetype-dev libxcursor-dev libxi-dev \
+  libxrandr-dev libopenblas-dev libvulkan-dev glslc libshaderc-dev \
+  spirv-headers openssl mesa-vulkan-drivers wl-clipboard wtype
+```
+
+Install the stable Rust toolchain with [rustup](https://rustup.rs/) and select it:
+
+```sh
+rustup default stable
+```
+
+### Arch Linux
+
+Install its native dependencies and, for a source build, the Rust toolchain:
 
 ```sh
 sudo pacman -S --needed base-devel git rustup python alsa-lib curl jq openssl xxd \
@@ -197,7 +218,8 @@ Managed installs check for signed updates when the service starts and every
 available update, then offers a **Restart** button in Settings for the service. The next launch
 through `~/.local/bin/hex` also uses the activated version. The signed update
 path is implemented but still awaiting a complete cross-version validation on
-the supported Arch/i3 host.
+the Arch/i3 reference host. Ubuntu CI exercises installer checks, but it is not
+a physical Ubuntu desktop or signed cross-version update test.
 
 See [`plans/linux.md`](plans/linux.md) for the engineering contract and remaining
 validation work. The native Wayland implementation builds on the feature

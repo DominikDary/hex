@@ -12,7 +12,7 @@ The Linux beta keeps its contracts explicit:
 | Area | Contract |
 | --- | --- |
 | Distribution | Signed user-local direct install, or Nix-owned package updates |
-| Host | x86_64 Linux; Arch/i3 reference and NixOS packaging |
+| Host | x86_64 Ubuntu 24.04 LTS and Arch Linux; Arch/i3 physical reference and NixOS packaging |
 | Desktop | i3/X11 or compatible wlroots Wayland compositor |
 | Audio | CPAL through ALSA, typically backed by PipeWire |
 | Inference | Vulkan with CPU fallback |
@@ -42,12 +42,15 @@ There is no hidden XWayland or privileged injection fallback. See
   shutdown; closing Settings leaves the managed runtime running.
 - Nix package and matching development shell, NixOS installation, optional
   Home Manager user service, and evaluated session-readiness checks.
+- Ubuntu 24.04 LTS x86_64 builds and Linux integration checks in CI, with
+  Ubuntu source-build instructions; native physical-desktop proof remains
+  separate from CI.
 - XDG paths, diagnostics, and exclusive listener ownership.
 - Signed user-local updates with bounded download, exact size and SHA-256
   verification, atomic version activation, and restart handoff.
 
 The update path is implemented but is not yet proven by a complete signed
-cross-version update on the supported Arch/i3 host.
+cross-version update on the Arch/i3 reference host.
 
 The release script publishes the direct installer as `install-linux.sh`. The
 installer verifies the same signed feed and content-addressed artifact as the in-app
@@ -59,8 +62,8 @@ pacman must own updates for that layout.
 
 ### 1. Validate The Signed Update Path
 
-Run a genuine update between two published stable versions on the supported
-Arch/i3 host. Verify:
+Run a genuine update between two published stable versions on the Arch/i3
+reference host. Verify:
 
 - manifest signature and monotonic-version enforcement;
 - exact artifact size and SHA-256 validation;
@@ -71,7 +74,16 @@ Arch/i3 host. Verify:
 
 This validation blocks calling the direct-install update channel proven.
 
-### 2. Add X11 Commands And Context
+### 2. Validate The Ubuntu Desktop Contract
+
+On a real x86_64 Ubuntu 24.04 LTS installation, verify the documented i3/X11
+path end to end, including model setup, audio, global shortcut, transcription,
+paste, and per-user service lifecycle. Separately verify native Wayland only on
+a compatible wlroots compositor with the required input access and protocols.
+Record the exact host, compositor, and outcomes; Ubuntu CI is not a substitute
+for this physical validation.
+
+### 3. Add X11 Commands And Context
 
 Only begin this slice when command parity is a product priority. Add:
 
@@ -85,7 +97,7 @@ Only begin this slice when command parity is a product priority. Add:
 Keep browser-host commands unavailable until a real browser adapter provides
 the active URL. Never infer a URL from a window title.
 
-### 3. Add Manual PipeWire Meetings
+### 4. Add Manual PipeWire Meetings
 
 Manual meeting recording precedes automatic detection. Capture two explicit
 sources:
@@ -102,14 +114,14 @@ Handle route replacement, Bluetooth profile changes, clock alignment, queue
 pressure, and HEX feedback appearing in the output monitor. Route loss must
 produce a visible gap or failure rather than silent corruption.
 
-### 4. Add Metadata-Only Meeting Offers
+### 5. Add Metadata-Only Meeting Offers
 
 After manual capture is reliable, observe PipeWire registry nodes and active
 links without recording samples. Normalize process and media metadata into the
 existing meeting-candidate model. Detection remains offer-only and never starts
 recording automatically.
 
-### 5. Expand Wayland Only With Explicit Capabilities
+### 6. Expand Wayland Only With Explicit Capabilities
 
 The implemented beta uses read-only evdev observation plus compositor-provided
 clipboard and virtual-keyboard protocols. It does not suppress the shortcut;
@@ -130,7 +142,7 @@ that handles keyboard hotplug, crash-safe key release, access policy, and exact
 re-injection of non-suppressed events. Do not build a general-purpose root
 daemon.
 
-### 6. Validate Distribution Channels Deliberately
+### 7. Validate Distribution Channels Deliberately
 
 The app-managed updater owns only the user-local direct-install layout. Nix owns
 its packaged installation and optional user service; a future Arch package must
@@ -207,7 +219,9 @@ implementation assumptions.
 
 ## Recorded Decisions
 
-- Target x86_64 Arch Linux rolling on i3/X11.
+- Target x86_64 Linux with Ubuntu 24.04 LTS and Arch Linux on i3/X11.
+- Keep Arch/i3 as the physical reference host until Ubuntu desktop behavior and
+  signed cross-version updates have been validated on a real Ubuntu installation.
 - Ship through a signed user-local direct-install channel.
 - Require automatic insertion and a key-containing shortcut.
 - Exclude meetings; scope native Wayland to compatible wlroots protocols and

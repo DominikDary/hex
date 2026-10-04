@@ -580,7 +580,7 @@ update from an older supported build.
 ## Other Platforms And Consumers
 
 ```ts
-Linux beta                               // not macOS feature parity
+Linux beta                               // not macOS feature parity; Ubuntu 24.04 LTS x86_64 + Arch
 ├── hex start -> Per-user service -> Alt-Space capture -> Transcribe -> Paste
 ├── hex app -> Settings client; closing it leaves the runtime running
 ├── Recording sounds -> Shortcut press / capture stop / active cancellation
@@ -609,7 +609,10 @@ modifier state to paste, avoiding two full device scans after every dictation.
 and `live_modifier_snapshot_tracks_edges_and_device_loss` cover those policies;
 the nested-compositor smoke remains the native insertion check.
 
-See the [Linux guide](../linux.md), [linux_app.rs](../../src/linux_app.rs),
+Ubuntu 24.04 LTS has build and integration coverage in
+[Linux CI](../../.github/workflows/check-linux.yml); that does not establish a
+physical Ubuntu desktop or signed cross-version update. See the
+[Linux guide](../linux.md), [linux_app.rs](../../src/linux_app.rs),
 [linux_wayland_input.rs](../../src/linux_wayland_input.rs), and
 [Linux CI](../../.github/workflows/check-linux.yml) for existing checks.
 The [direct installer/updater](../../src/linux_updater.rs) and

@@ -256,7 +256,7 @@ Proof limit: source and available headless checks, not current supported-host
 behavior. Native compositor/device validation remains separate. The service
 socket is same-user only; bounded I/O and queues keep client stalls off the audio loop.
 
-**Fixed after 2.1.22:** on X11 the Escape-cancel grab is best-effort.
+**Fixed after 2.1.24:** on X11 the Escape-cancel grab is best-effort.
 
 ```ts
 capture starts -> grab Escape with AnyModifier        // recover.linux-escape
